@@ -1,5 +1,7 @@
 # NESGym
 
+[![Build Status](https://travis-ci.org/kaiquewdev/nesgym.svg?branch=master)](https://travis-ci.org/kaiquewdev/nesgym)
+
 An openai-gym wrapper for nes games.
 
 # Installation
