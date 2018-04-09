@@ -106,7 +106,9 @@ class DoubleDQN(object):
 
     def get_learning_rate(self):
         optimizer = self.base_model.optimizer
-        lr = K.eval(optimizer.lr * (1. / (1. + optimizer.decay * optimizer.iterations)))
+        #import pdb; pdb.set_trace()
+        #lr = K.eval(optimizer.lr * (1. / (1. + optimizer.decay * optimizer.iterations)))
+        lr = K.eval(optimizer.lr * (1. / (1. + optimizer.decay * K.eval(optimizer.iterations))))
         return lr
 
     def get_avg_loss(self):
