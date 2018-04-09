@@ -53,6 +53,7 @@ def soccer_main():
                   'learning rate:', dqn.get_learning_rate(), 'last 100 training loss mean', dqn.get_avg_loss(),
                   'last 100 episode mean rewards: ', np.mean(np.array(episode_rewards, dtype=np.float32)))
         # env.render()
+        import pdb; pdb.set_trace()
         action = dqn.choose_action(step, last_obs)
         obs, reward, done, info = env.step(action)
         reward_sum_episode += reward

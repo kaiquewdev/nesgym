@@ -7,6 +7,8 @@ from model import q_model
 from model import DoubleDQN
 from model import ReplayBuffer
 
+import numpy as np
+
 class QFunctionImageInputTest(tf.test.TestCase):
 	def testInstanceComparison(self):
 		with self.test_session():
@@ -39,6 +41,10 @@ class DoubleDQNClassTest(tf.test.TestCase):
 
 	def testInsidePropertyReplayBufferInstanceComparison(self):
 		self.assertEqual(type(self.dqn.replay_buffer),ReplayBuffer)
+
+	def testChooseActionMethodOutputType(self):
+		observations = np.array([10,10,10])
+		self.assertEqual(type(self.dqn.choose_action(5,observations)),int)
 
 if __name__ == '__main__':
 	tf.test.main()
