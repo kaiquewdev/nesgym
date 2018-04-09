@@ -13,7 +13,7 @@ class QFunctionImageInputTest(tf.test.TestCase):
 			self.assertEqual(type(q[0]),tf.Tensor)
 
 class QFunctionActionsTest(tf.test.TestCase):
-	def instanceComparison(self):
+	def testInstanceComparison(self):
 		with self.test_session():
 			q = q_function((84,84,1),16)
 			self.assertEqual(q[1],tf.Tensor)
