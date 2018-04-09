@@ -5,6 +5,7 @@ from keras.models import Model
 from model import q_function
 from model import q_model
 from model import DoubleDQN
+from model import ReplayBuffer
 
 class QFunctionImageInputTest(tf.test.TestCase):
 	def testInstanceComparison(self):
@@ -35,6 +36,9 @@ class DoubleDQNClassTest(tf.test.TestCase):
 
 	def testInstanceComparison(self):
 		self.assertEqual(type(self.dqn),DoubleDQN)
+
+	def testInsidePropertyReplayBufferInstanceComparison(self):
+		self.assertEqual(type(self.dqn.replay_buffer),ReplayBuffer)
 
 if __name__ == '__main__':
 	tf.test.main()
