@@ -3,4 +3,6 @@ python:
   - '3.6'
 install:
   - pip install tensorflow
+  - pip install keras
+  - pip install gym
 script: python src/dqn/model_test.py
