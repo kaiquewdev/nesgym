@@ -1,7 +1,9 @@
 import tensorflow as tf
 
+from keras.models import Model
+
 from model import q_function
-# from model import q_model
+from model import q_model
 # from model import DoubleDQN
 
 import numpy as np
@@ -18,10 +20,11 @@ class QFunctionActionsTest(tf.test.TestCase):
 			q = q_function((84,84,1),16)
 			self.assertEqual(type(q[1]),tf.Tensor)
 
-# class QModelTest(tf.test.TestCase):
-# 	def instanceComparison(self):
-# 		with self.test_session():
-# 			self.assertEqual(q_model((84,84,1),16).__class__,tf.keras.models.Model)
+class QModelTest(tf.test.TestCase):
+	def testInstanceComparison(self):
+		with self.test_session():
+			q = q_model((84,84,1),16)
+			self.assertEqual(type(q),Model)
 
 # class DoubleDQNClassTest(tf.test.TestCase):
 # 	def setUp(self):
