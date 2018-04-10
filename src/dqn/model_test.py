@@ -54,5 +54,8 @@ class DoubleDQNClassTest(tf.test.TestCase):
 		expected_avg_loss = np.mean(np.array(self.dqn.latest_losses,dtype=np.float32))
 		self.assertEqual(self.dqn.get_avg_loss(),expected_avg_loss)
 
+	def testGetAvgLossWhenZero(self):
+		self.assertEqual(self.dqn.get_avg_loss(),None)
+
 if __name__ == '__main__':
 	tf.test.main()
