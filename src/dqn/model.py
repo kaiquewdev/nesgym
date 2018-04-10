@@ -110,11 +110,19 @@ class DoubleDQN(object):
         eval_iterations = K.eval(iterations_optimizer)
         return eval_iterations
 
+    def mul_decay_iters(self):
+        optimizer = self.base_model.optimizer
+        evaluated_iters = self.eval_iters()
+        evaluated_mul_decay_iters = K.eval(optimizer.decay * evaluated_iters)
+        return evaluated_mul_decay_iters
+
     def get_learning_rate(self):
         optimizer = self.base_model.optimizer
         #import pdb; pdb.set_trace()
         #lr = K.eval(optimizer.lr * (1. / (1. + optimizer.decay * optimizer.iterations)))
-        lr = K.eval(optimizer.lr * (1. / (1. + optimizer.decay * K.eval(optimizer.iterations))))
+        evaluated_iters = self.eval_iters()
+        mul_decay_with_evaluated_iters = (optimizer.decay * evaluated_iters)
+        lr = K.eval(optimizer.lr * (1. / (1. + mul_decay_with_evaluated_iters)))
         return lr
 
     def get_avg_loss(self):

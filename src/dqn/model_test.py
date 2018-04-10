@@ -49,6 +49,9 @@ class DoubleDQNClassTest(tf.test.TestCase):
 	def testIterationsEvaluationType(self):
 		self.assertEqual(type(self.dqn.eval_iters()),np.int64)
 
+	def testMulDecayCrossingEvaluatedIterationsType(self):
+		self.assertEqual(type(self.dqn.mul_decay_iters()),np.float32)
+
 	def testGetLearningRateMethod(self):
 		self.assertEqual(self.dqn.get_learning_rate() > 0,True)
 
