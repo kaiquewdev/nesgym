@@ -52,8 +52,14 @@ class DoubleDQNClassTest(tf.test.TestCase):
 	def testMulDecayCrossingEvaluatedIterationsType(self):
 		self.assertEqual(type(self.dqn.mul_decay_iters()),np.float32)
 
+	def testNormalizeMultiplicatedParametersValues(self):
+		self.assertEqual(type(self.dqn.normalize_params()),np.float64)
+
 	def testGetLearningRateMethod(self):
 		self.assertEqual(self.dqn.get_learning_rate() > 0,True)
+
+	def testGetterLeaningRateType(self):
+		self.assertEqual(type(self.dqn.get_learning_rate()),np.float32)
 
 	def testFirstStateOfGetAvgLoss(self):
 		self.dqn.latest_losses.append(.92781)
