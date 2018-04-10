@@ -121,8 +121,8 @@ class DoubleDQN(object):
         #import pdb; pdb.set_trace()
         #lr = K.eval(optimizer.lr * (1. / (1. + optimizer.decay * optimizer.iterations)))
         evaluated_iters = self.eval_iters()
-        mul_decay_with_evaluated_iters = (optimizer.decay * evaluated_iters)
-        lr = K.eval(optimizer.lr * (1. / (1. + mul_decay_with_evaluated_iters)))
+        mul_decay_evaluated_iters = self.mul_decay_iters()
+        lr = K.eval(optimizer.lr * (1. / (1. + mul_decay_evaluated_iters)))
         return lr
 
     def get_avg_loss(self):
