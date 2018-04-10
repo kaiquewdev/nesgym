@@ -104,6 +104,12 @@ class DoubleDQN(object):
         if step > self.training_starts and step % self.target_update_freq == 0:
             self._update_target()
 
+    def eval_iters(self):
+        optimizer = self.base_model.optimizer
+        iterations_optimizer = optimizer.iterations
+        eval_iterations = K.eval(iterations_optimizer)
+        return eval_iterations
+
     def get_learning_rate(self):
         optimizer = self.base_model.optimizer
         #import pdb; pdb.set_trace()
@@ -112,8 +118,13 @@ class DoubleDQN(object):
         return lr
 
     def get_avg_loss(self):
-        if len(self.latest_losses) > 0:
-            return np.mean(np.array(self.latest_losses, dtype=np.float32))
+        latest_losses = self.latest_losses
+        is_gt_zero_latest_losses = len(latest_losses) > 0
+        if is_gt_zero_latest_losses:
+            latest_losses = np.array(latest_losses,
+                                     dtype=np.float32)
+            mean_latest_losses = np.mean(latest_losses)
+            return mean_latest_losses
         else:
             return None
 
