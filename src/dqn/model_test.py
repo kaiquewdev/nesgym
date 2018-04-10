@@ -46,5 +46,8 @@ class DoubleDQNClassTest(tf.test.TestCase):
 		observations = np.array([10,10,10])
 		self.assertEqual(type(self.dqn.choose_action(5,observations)),int)
 
+	def testGetLearningRateMethod(self):
+		self.assertEqual(self.dqn.get_learning_rate() > 0,True)
+
 if __name__ == '__main__':
 	tf.test.main()
