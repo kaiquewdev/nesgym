@@ -9,8 +9,15 @@ from keras import backend as K
 
 import numpy as np
 
-from replay_buffer import ReplayBuffer
-from utils import LinearSchedule, PiecewiseSchedule
+try:
+    from replay_buffer import ReplayBuffer
+except Exception:
+    from .replay_buffer import ReplayBuffer
+
+try:
+    from utils import LinearSchedule, PiecewiseSchedule
+except Exception:
+    from .utils import LinearSchedule, PiecewiseSchedule
 
 from collections import deque
 
