@@ -46,6 +46,10 @@ class DoubleDQNClassTest(tf.test.TestCase):
 		observations = np.array([10,10,10])
 		self.assertEqual(type(self.dqn.choose_action(5,observations)),int)
 
+	def testChooseActionMethodOutputValue(self):
+		observations = np.array([10,10,10])
+		self.assertEqual(self.dqn.choose_action(5,observations) > 0,True)
+
 	def testIterationsEvaluationType(self):
 		self.assertEqual(type(self.dqn.eval_iters()),np.int64)
 
