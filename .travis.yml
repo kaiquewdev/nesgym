@@ -7,4 +7,4 @@ install:
   - pip install gym
 script:
   - python src/dqn/model_test.py
-  - python src/dqn/run_soccer_test.py
+  - python src/run_soccer_test.py
