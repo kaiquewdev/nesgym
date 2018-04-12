@@ -7,6 +7,8 @@ from model import q_model
 from model import DoubleDQN
 from model import ReplayBuffer
 
+from utils import PiecewiseSchedule
+
 import numpy as np
 
 class QFunctionImageInputTest(tf.test.TestCase):
@@ -29,12 +31,20 @@ class QModelTest(tf.test.TestCase):
 
 class DoubleDQNClassTest(tf.test.TestCase):
 	def setUp(self):
+		max_timesteps = 40000000
+		exploration_schedule = PiecewiseSchedule(
+	        [
+	            (0, 1.0),
+	            (1e5, 0.1),
+	            (max_timesteps / 2, 0.01),
+	        ], outside_value=0.01
+	    )
 		self.dqn = DoubleDQN(image_shape=(84, 84, 1),
                        num_actions=16,
                        training_starts=10000,
                        target_update_freq=4000,
                        training_batch_size=64,
-                       exploration=100)
+                       exploration=exploration_schedule)
 
 	def testInstanceComparison(self):
 		with self.test_session():
@@ -56,6 +66,10 @@ class DoubleDQNClassTest(tf.test.TestCase):
 	def testTrainHaveStartedConditionWithStepLtTrainings(self):
 		with self.test_session():
 			self.assertEqual(self.dqn.train_have_started(10),True)
+
+	def testNewExplorationDecisionMethodType(self):
+		with self.test_session():
+			self.assertEqual(type(self.dqn.is_new_exploration_decision(10)),bool)
 
 	def testChooseActionMethodOutputType(self):
 		with self.test_session():
