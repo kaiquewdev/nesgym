@@ -22,21 +22,17 @@ except Exception:
 
 from collections import deque
 
-np.random.seed(256)
+np.random.seed(768)
 
 def q_function(input_shape, num_actions):
     image_input = Input(shape=input_shape)
     out = Conv2D(filters=32, kernel_size=8, strides=(4, 4), padding='valid', use_bias=True, activation='relu')(image_input)
-    #out = Conv2D(filters=32, kernel_size=8, strides=(4, 4), padding='valid', activation='relu')(image_input)
-    #out = Conv2D(filters=64, kernel_size=4, strides=(2, 2), padding='valid', activation='relu')(out)
     out = Conv2D(filters=64, kernel_size=4, strides=(2, 2), padding='valid', activation='relu')(out)
     out = AveragePooling2D(pool_size=(2, 2), padding='valid')(out)
-    #out = Conv2D(filters=64, kernel_size=3, strides=(1, 1), padding='valid', activation='relu')(out)
     out = Conv2D(filters=64, kernel_size=3, strides=(1, 1), padding='valid', activation='relu')(out)
     out = AveragePooling2D(pool_size=(1, 1), padding='valid')(out)
     out = Flatten()(out)
-    out = Dense(512, activation='softsign')(out)
-    #out = Dense(512, activation='relu')(out)
+    out = Dense(512, activation='relu')(out)
     q_value = Dense(num_actions)(out)
 
     return image_input, q_value
@@ -107,6 +103,9 @@ class DoubleDQN(object):
 
     def is_new_exploration_decision(self, step):
         return (np.random.rand() < self.exploration.value(step))
+
+    def get_randint_actions(self):
+        return np.random.randint(self.num_actions)
 
     def choose_action(self, step, obs):
         self.replay_buffer_idx = self.get_replay_buffer_idx(obs)

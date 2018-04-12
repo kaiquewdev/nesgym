@@ -71,6 +71,10 @@ class DoubleDQNClassTest(tf.test.TestCase):
 		with self.test_session():
 			self.assertEqual(type(self.dqn.is_new_exploration_decision(10)),bool)
 
+	def testGetRandomIntegerActionsType(self):
+		with self.test_session():
+			self.assertEqual(type(self.dqn.get_randint_actions()),int)
+
 	def testChooseActionMethodOutputType(self):
 		with self.test_session():
 			observations = np.array([10,10,10])
