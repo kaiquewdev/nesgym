@@ -5,4 +5,6 @@ install:
   - pip install tensorflow
   - pip install keras
   - pip install gym
-script: python src/dqn/model_test.py
+script:
+  - python src/dqn/model_test.py
+  - python src/dqn/run_soccer_test.py
