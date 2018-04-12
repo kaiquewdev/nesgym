@@ -107,7 +107,7 @@ class DoubleDQN(object):
 
     def choose_action(self, step, obs):
         self.replay_buffer_idx = self.get_replay_buffer_idx(obs)
-        if step < self.training_starts or np.random.rand() < self.exploration.value(step):
+        if self.train_have_started(step) or np.random.rand() < self.exploration.value(step):
             # take random action
             action = np.random.randint(self.num_actions)
         else:
