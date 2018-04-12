@@ -5,6 +5,7 @@ install:
   - pip install tensorflow
   - pip install keras
   - pip install gym
+  - pip install opencv-python
 script:
   - python src/dqn/model_test.py
   - python src/run_soccer_test.py
