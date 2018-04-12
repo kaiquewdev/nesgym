@@ -102,6 +102,9 @@ class DoubleDQN(object):
     def get_replay_buffer_idx(self, obs):
         return self.replay_buffer.store_frame(obs)
 
+    def train_have_started(self, step):
+        return step < self.training_starts
+
     def choose_action(self, step, obs):
         self.replay_buffer_idx = self.get_replay_buffer_idx(obs)
         if step < self.training_starts or np.random.rand() < self.exploration.value(step):

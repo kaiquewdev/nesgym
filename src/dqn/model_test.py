@@ -49,6 +49,14 @@ class DoubleDQNClassTest(tf.test.TestCase):
 			obs = np.array([10,10,10])
 			self.assertEqual(type(self.dqn.get_replay_buffer_idx(obs)),int)
 
+	def testTrainHaveStartedCondition(self):
+		with self.test_session():
+			self.assertEqual(self.dqn.train_have_started(10**4),False)
+
+	def testTrainHaveStartedConditionWithStepLtTrainings(self):
+		with self.test_session():
+			self.assertEqual(self.dqn.train_have_started(10),True)
+
 	def testChooseActionMethodOutputType(self):
 		with self.test_session():
 			observations = np.array([10,10,10])
