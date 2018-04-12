@@ -111,7 +111,7 @@ class DoubleDQN(object):
         self.replay_buffer_idx = self.get_replay_buffer_idx(obs)
         if self.train_have_started(step) or self.is_new_exploration_decision(step):
             # take random action
-            action = np.random.randint(self.num_actions)
+            action = self.get_randint_actions()
         else:
             # take action that results in maximum q value
             recent_obs = self.replay_buffer.encode_recent_observation()
