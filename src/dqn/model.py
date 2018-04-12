@@ -1,5 +1,6 @@
 import keras
 from keras.layers.convolutional import Conv2D
+from keras.layers.convolutional import AveragePooling2D
 from keras.layers.core import Flatten
 from keras.layers import Dense, Input
 from keras.models import Model
@@ -21,14 +22,21 @@ except Exception:
 
 from collections import deque
 
+np.random.seed(256)
 
 def q_function(input_shape, num_actions):
     image_input = Input(shape=input_shape)
-    out = Conv2D(filters=32, kernel_size=8, strides=(4, 4), padding='valid', activation='relu')(image_input)
+    out = Conv2D(filters=32, kernel_size=8, strides=(4, 4), padding='valid', use_bias=True, activation='relu')(image_input)
+    #out = Conv2D(filters=32, kernel_size=8, strides=(4, 4), padding='valid', activation='relu')(image_input)
+    #out = Conv2D(filters=64, kernel_size=4, strides=(2, 2), padding='valid', activation='relu')(out)
     out = Conv2D(filters=64, kernel_size=4, strides=(2, 2), padding='valid', activation='relu')(out)
+    out = AveragePooling2D(pool_size=(2, 2), padding='valid')(out)
+    #out = Conv2D(filters=64, kernel_size=3, strides=(1, 1), padding='valid', activation='relu')(out)
     out = Conv2D(filters=64, kernel_size=3, strides=(1, 1), padding='valid', activation='relu')(out)
+    out = AveragePooling2D(pool_size=(1, 1), padding='valid')(out)
     out = Flatten()(out)
-    out = Dense(512, activation='relu')(out)
+    out = Dense(512, activation='softsign')(out)
+    #out = Dense(512, activation='relu')(out)
     q_value = Dense(num_actions)(out)
 
     return image_input, q_value
@@ -91,8 +99,11 @@ class DoubleDQN(object):
         self.tensorboard_callback = TensorBoard(log_dir=log_dir)
         self.latest_losses = deque(maxlen=100)
 
+    def get_replay_buffer_idx(self, obs):
+        return self.replay_buffer.store_frame(obs)
+
     def choose_action(self, step, obs):
-        self.replay_buffer_idx = self.replay_buffer.store_frame(obs)
+        self.replay_buffer_idx = self.get_replay_buffer_idx(obs)
         if step < self.training_starts or np.random.rand() < self.exploration.value(step):
             # take random action
             action = np.random.randint(self.num_actions)

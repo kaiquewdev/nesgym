@@ -37,41 +37,57 @@ class DoubleDQNClassTest(tf.test.TestCase):
                        exploration=100)
 
 	def testInstanceComparison(self):
-		self.assertEqual(type(self.dqn),DoubleDQN)
+		with self.test_session():
+			self.assertEqual(type(self.dqn),DoubleDQN)
 
 	def testInsidePropertyReplayBufferInstanceComparison(self):
-		self.assertEqual(type(self.dqn.replay_buffer),ReplayBuffer)
+		with self.test_session():
+			self.assertEqual(type(self.dqn.replay_buffer),ReplayBuffer)
+
+	def testGetReplayBufferIdx(self):
+		with self.test_session():
+			obs = np.array([10,10,10])
+			self.assertEqual(type(self.dqn.get_replay_buffer_idx(obs)),int)
 
 	def testChooseActionMethodOutputType(self):
-		observations = np.array([10,10,10])
-		self.assertEqual(type(self.dqn.choose_action(5,observations)),int)
+		with self.test_session():
+			observations = np.array([10,10,10])
+			self.assertEqual(type(self.dqn.choose_action(5,observations)),int)
 
-	def testChooseActionMethodOutputValue(self):
-		observations = np.array([10,10,10])
-		self.assertEqual(self.dqn.choose_action(5,observations) > 0,True)
+	# def testChooseActionMethodOutputValue(self):
+		# with self.test_session():
+			# observations = np.array([10,10,10])
+			# self.assertEqual(self.dqn.choose_action(5,observations) > 0,True)
 
 	def testIterationsEvaluationType(self):
-		self.assertEqual(type(self.dqn.eval_iters()),np.int64)
+		with self.test_session():
+			self.assertEqual(type(self.dqn.eval_iters()),np.int64)
 
 	def testMulDecayCrossingEvaluatedIterationsType(self):
-		self.assertEqual(type(self.dqn.mul_decay_iters()),np.float32)
+		with self.test_session():
+			self.assertEqual(type(self.dqn.mul_decay_iters()),np.float32)
 
 	def testNormalizeMultiplicatedParametersValues(self):
-		self.assertEqual(type(self.dqn.normalize_params()),np.float64)
+		with self.test_session():
+			self.assertEqual(type(self.dqn.normalize_params()),np.float64)
 
 	def testGetLearningRateMethod(self):
-		self.assertEqual(self.dqn.get_learning_rate() > 0,True)
+		with self.test_session():
+			self.assertEqual(self.dqn.get_learning_rate() > 0,True)
 
 	def testGetterLeaningRateType(self):
-		self.assertEqual(type(self.dqn.get_learning_rate()),np.float32)
+		with self.test_session():
+			self.assertEqual(type(self.dqn.get_learning_rate()),np.float32)
 
 	def testFirstStateOfGetAvgLoss(self):
-		self.dqn.latest_losses.append(.92781)
-		expected_avg_loss = np.mean(np.array(self.dqn.latest_losses,dtype=np.float32))
-		self.assertEqual(self.dqn.get_avg_loss(),expected_avg_loss)
+		with self.test_session():
+			self.dqn.latest_losses.append(.92781)
+			expected_avg_loss = np.mean(np.array(self.dqn.latest_losses,dtype=np.float32))
+			self.assertEqual(self.dqn.get_avg_loss(),expected_avg_loss)
 
 	def testGetAvgLossWhenZero(self):
-		self.assertEqual(self.dqn.get_avg_loss(),None)
+		with self.test_session():
+			self.assertEqual(self.dqn.get_avg_loss(),None)
 
 if __name__ == '__main__':
 	tf.test.main()
