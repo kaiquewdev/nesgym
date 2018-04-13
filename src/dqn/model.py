@@ -117,7 +117,7 @@ class DoubleDQN(object):
             action = self.get_randint_actions()
         else:
             # take action that results in maximum q value
-            recent_obs = self.replay_buffer.encode_recent_observation()
+            recent_obs = self.encodeRecentObservationsReplayBuffer()
             q_vals = self.base_model.predict_on_batch(np.array([recent_obs])).flatten()
             action = np.argmax(q_vals)
         return action
