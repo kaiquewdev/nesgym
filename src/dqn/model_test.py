@@ -95,6 +95,30 @@ class DoubleDQNClassTest(tf.test.TestCase):
 		with self.test_session():
 			self.assertEqual(self.dqn.replay_buffer.litimus_against_id(10),6)
 
+	def testRidType(self):
+		with self.test_session():
+			self.assertEqual(type(self.dqn.replay_buffer.rid(4)),int)
+
+	def testRid(self):
+		with self.test_session():
+			self.assertEqual(self.dqn.replay_buffer.rid(5),4)
+
+	def testRidEmptyArgumentState(self):
+		with self.test_session():
+			self.assertEqual(self.dqn.replay_buffer.rid(),0)
+
+	def testGetObservationValueWithOption(self):
+		with self.test_session():
+			self.assertEqual(self.dqn.replay_buffer.get_observation('uncommon','ungatered key'),'ungatered key')
+
+	def testObservationsShapeLengthType(self):
+		with self.test_session():
+			self.assertEqual(type(self.dqn.replay_buffer.observations_shape_length()),int)
+
+	def testObservationsShapeLength(self):
+		with self.test_session():
+			self.assertEqual(self.dqn.replay_buffer.observations_shape_length(),0)
+
 	def testChooseActionMethodOutputType(self):
 		with self.test_session():
 			observations = np.array([10,10,10])
