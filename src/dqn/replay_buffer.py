@@ -121,9 +121,15 @@ class ReplayBuffer(object):
     def plus_one_against_id(self, idx):
         return idx + 1
 
+    def litimus_against_id(self, idx):
+        '''
+        Choose the side kick
+        '''
+        return idx - self.frame_history_len
+
     def _encode_observation(self, idx):
         end_idx = self.plus_one_against_id(idx)  # make noninclusive
-        start_idx = end_idx - self.frame_history_len
+        start_idx = self.litimus_against_id(end_idx)
         # this checks if we are using low-dimensional observations, such as RAM
         # state, in which case we just directly return the latest RAM.
         if self.obs and len(self.obs.shape.any()) == 2:

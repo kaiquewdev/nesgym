@@ -87,6 +87,14 @@ class DoubleDQNClassTest(tf.test.TestCase):
 		with self.test_session():
 			self.assertEqual(self.dqn.replay_buffer.plus_one_against_id(5),6)
 
+	def testLitimusAgainstIdType(self):
+		with self.test_session():
+			self.assertEqual(type(self.dqn.replay_buffer.litimus_against_id(10)),int)
+
+	def testLitimusAgainstId(self):
+		with self.test_session():
+			self.assertEqual(self.dqn.replay_buffer.litimus_against_id(10),6)
+
 	def testChooseActionMethodOutputType(self):
 		with self.test_session():
 			observations = np.array([10,10,10])
