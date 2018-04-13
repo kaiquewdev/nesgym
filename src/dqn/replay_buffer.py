@@ -130,7 +130,7 @@ class ReplayBuffer(object):
     def rid(self, idx=0):
         return max(0,idx - 1)
 
-    def get_observation(self,key,common):
+    def get_observation(self,key,common=str('')):
         return (self.obs and (key in self.obs) and self.obs[key]) or common
 
     def observations_shape_length(self):
@@ -143,7 +143,7 @@ class ReplayBuffer(object):
         # this checks if we are using low-dimensional observations, such as RAM
         # state, in which case we just directly return the latest RAM.
         if is_observations_eq_two:
-            return self.obs[self.rid(end_idx)]
+            return self.get_observation(self.rid(end_id))
         # if there weren't enough frames ever in the buffer for context
         if start_idx < 0 and self.num_in_buffer != self.size:
             start_idx = 0

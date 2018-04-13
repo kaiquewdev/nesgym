@@ -111,6 +111,16 @@ class DoubleDQNClassTest(tf.test.TestCase):
 		with self.test_session():
 			self.assertEqual(self.dqn.replay_buffer.get_observation('uncommon','ungatered key'),'ungatered key')
 
+	def testGetObservationValueType(self):
+		with self.test_session():
+			self.dqn.replay_buffer.obs = {'blanka':[1,2,3]}
+			self.assertEqual(type(self.dqn.replay_buffer.get_observation('blanka')),list)
+
+	def testGetObservationValue(self):
+		with self.test_session():
+			self.dqn.replay_buffer.obs = {'blanka':1}
+			self.assertEqual(self.dqn.replay_buffer.get_observation('blanka'),1)
+
 	def testObservationsShapeLengthType(self):
 		with self.test_session():
 			self.assertEqual(type(self.dqn.replay_buffer.observations_shape_length()),int)
