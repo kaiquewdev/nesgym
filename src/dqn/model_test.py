@@ -75,6 +75,10 @@ class DoubleDQNClassTest(tf.test.TestCase):
 		with self.test_session():
 			self.assertEqual(type(self.dqn.get_randint_actions()),int)
 
+	def testEncodeRecentObservationsReplayBufferType(self):
+		with self.test_session():
+			self.assertEqual(type(self.dqn.encodeRecentObservationsReplayBuffer()),int)
+
 	def testChooseActionMethodOutputType(self):
 		with self.test_session():
 			observations = np.array([10,10,10])

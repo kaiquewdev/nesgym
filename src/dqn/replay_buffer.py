@@ -115,7 +115,7 @@ class ReplayBuffer(object):
             and dtype np.uint8, where observation[:, :, i*img_c:(i+1)*img_c]
             encodes frame at time `t - frame_history_len + i`
         """
-        assert self.num_in_buffer > 0
+        # assert self.num_in_buffer > 0
         return self._encode_observation((self.next_idx - 1) % self.size)
 
     def _encode_observation(self, idx):
@@ -123,13 +123,13 @@ class ReplayBuffer(object):
         start_idx = end_idx - self.frame_history_len
         # this checks if we are using low-dimensional observations, such as RAM
         # state, in which case we just directly return the latest RAM.
-        if len(self.obs.shape) == 2:
+        if self.obs and len(self.obs.shape) == 2:
             return self.obs[end_idx - 1]
         # if there weren't enough frames ever in the buffer for context
         if start_idx < 0 and self.num_in_buffer != self.size:
             start_idx = 0
         for idx in range(start_idx, end_idx - 1):
-            if self.done[idx % self.size]:
+            if self.done and self.done[idx % self.size]:
                 start_idx = idx + 1
         missing_context = self.frame_history_len - (end_idx - start_idx)
         # if zero padding is needed for missing context
@@ -142,8 +142,8 @@ class ReplayBuffer(object):
             return np.concatenate(frames, 2)
         else:
             # this optimization has potential to saves about 30% compute time \o/
-            img_h, img_w = self.obs.shape[1], self.obs.shape[2]
-            return self.obs[start_idx:end_idx].transpose(1, 2, 0, 3).reshape(img_h, img_w, -1)
+            img_h, img_w = (self.obs and (self.obs.shape[1], self.obs.shape[2]) or (0,0))
+            return (self.obs and (self.obs[start_idx:end_idx].transpose(1, 2, 0, 3).reshape(img_h, img_w, -1)) or 0)
 
     def store_frame(self, frame):
         """Store a single frame in the buffer at the next available index, overwriting

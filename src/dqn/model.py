@@ -107,6 +107,9 @@ class DoubleDQN(object):
     def get_randint_actions(self):
         return np.random.randint(self.num_actions)
 
+    def encodeRecentObservationsReplayBuffer(self):
+        return self.replay_buffer.encode_recent_observation()
+
     def choose_action(self, step, obs):
         self.replay_buffer_idx = self.get_replay_buffer_idx(obs)
         if self.train_have_started(step) or self.is_new_exploration_decision(step):
