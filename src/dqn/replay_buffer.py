@@ -123,7 +123,7 @@ class ReplayBuffer(object):
         start_idx = end_idx - self.frame_history_len
         # this checks if we are using low-dimensional observations, such as RAM
         # state, in which case we just directly return the latest RAM.
-        if self.obs and len(self.obs.shape) == 2:
+        if self.obs and len(self.obs.shape.any()) == 2:
             return self.obs[end_idx - 1]
         # if there weren't enough frames ever in the buffer for context
         if start_idx < 0 and self.num_in_buffer != self.size:
