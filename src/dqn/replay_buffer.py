@@ -118,8 +118,11 @@ class ReplayBuffer(object):
         # assert self.num_in_buffer > 0
         return self._encode_observation((self.next_idx - 1) % self.size)
 
+    def plus_one_against_id(self, idx):
+        return idx + 1
+
     def _encode_observation(self, idx):
-        end_idx = idx + 1  # make noninclusive
+        end_idx = self.plus_one_against_id(idx)  # make noninclusive
         start_idx = end_idx - self.frame_history_len
         # this checks if we are using low-dimensional observations, such as RAM
         # state, in which case we just directly return the latest RAM.
