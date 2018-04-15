@@ -134,21 +134,24 @@ class ReplayBuffer(object):
         return (self.obs and (key in self.obs) and self.obs[key]) or common
 
     def _has_not_observations(self):
-        return self.obs == None
+        return self.obs is None
 
     def _has_observations(self):
-        return self.obs != None
+        return self.obs is not None
 
-    def _observations_size(self):
-        return self.obs.size
+    def _has_observations_shape(self):
+        return self._has_observations() and self.obs.shape
 
     def observations_shape_length(self):
-        return (self._has_observations() and (self._observations_size() or 0))
+        return (self._has_observations_shape() and len(self.obs.shape)) or 0
+
+    def is_observations_length_eq(self, v=2):
+        return self.observations_shape_length() == v
 
     def _encode_observation(self, idx):
         end_idx = self.plus_one_against_id(idx)  # make noninclusive
         start_idx = self.litimus_against_id(end_idx)
-        is_observations_eq_two = self.observations_shape_length() == 2
+        is_observations_eq_two = self.is_observations_length_eq()
         # this checks if we are using low-dimensional observations, such as RAM
         # state, in which case we just directly return the latest RAM.
         if is_observations_eq_two:

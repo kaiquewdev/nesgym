@@ -129,6 +129,11 @@ class DoubleDQNClassTest(tf.test.TestCase):
 		with self.test_session():
 			self.assertEqual(self.dqn.replay_buffer.observations_shape_length(),0)
 
+	def testIsObservationsLengthEqualToSpecifiedValueDefault(self):
+		with self.test_session():
+			self.dqn.replay_buffer.obs = np.array([[1, 1],[2, 2]])
+			self.assertEqual(self.dqn.replay_buffer.is_observations_length_eq(2),True)
+
 	def testChooseActionMethodOutputType(self):
 		with self.test_session():
 			observations = np.array([10,10,10])
