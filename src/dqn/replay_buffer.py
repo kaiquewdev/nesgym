@@ -148,10 +148,20 @@ class ReplayBuffer(object):
     def is_observations_length_eq(self, v=2):
         return self.observations_shape_length() == v
 
+    def _has_done_prop(self):
+        return self.done is not None
+
+    def _mod_idx(self, v):
+        return v % self.size
+
+    # def _get_done_prop_indice(self, v):
+    #     return self.done[v]
+
     def _encode_observation(self, idx):
         end_idx = self.plus_one_against_id(idx)  # make noninclusive
         start_idx = self.litimus_against_id(end_idx)
         is_observations_eq_two = self.is_observations_length_eq()
+        has_done_prop = self._has_done_prop()
         # this checks if we are using low-dimensional observations, such as RAM
         # state, in which case we just directly return the latest RAM.
         if is_observations_eq_two:
@@ -160,7 +170,10 @@ class ReplayBuffer(object):
         if start_idx < 0 and self.num_in_buffer != self.size:
             start_idx = 0
         for idx in range(start_idx, end_idx - 1):
-            if self.done and self.done[idx % self.size]:
+            mod_idx = self._mod_idx(idx)
+            has_done_prop = self._has_done_prop()
+            # done_value = self._get_done_prop_indice(mod_idx)
+            if has_done_prop and self.done[mod_idx]:
                 start_idx = idx + 1
         missing_context = self.frame_history_len - (end_idx - start_idx)
         # if zero padding is needed for missing context
