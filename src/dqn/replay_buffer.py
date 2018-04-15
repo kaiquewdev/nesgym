@@ -133,8 +133,17 @@ class ReplayBuffer(object):
     def get_observation(self,key,common=str('')):
         return (self.obs and (key in self.obs) and self.obs[key]) or common
 
+    def _has_not_observations(self):
+        return self.obs == None
+
+    def _has_observations(self):
+        return self.obs != None
+
+    def _observations_size(self):
+        return self.obs.size
+
     def observations_shape_length(self):
-        return ((self.obs and (self.obs.size or self.obs.shape.size)) or 0)
+        return (self._has_observations() and (self._observations_size() or 0))
 
     def _encode_observation(self, idx):
         end_idx = self.plus_one_against_id(idx)  # make noninclusive
