@@ -152,7 +152,7 @@ class ReplayBuffer(object):
         return self._has_observations_shape()
 
     def observations_shape_length(self):
-        return (self._has_observations_shape() and len(self.obs.shape)) or 0
+        return (self._has_observations_shape() and ((type(self.obs) == np.ndarray)) and len(self.obs.shape)) or 0
 
     def is_observations_length_eq(self, v=2):
         return self.observations_shape_length() == v
