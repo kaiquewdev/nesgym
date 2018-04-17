@@ -148,6 +148,9 @@ class ReplayBuffer(object):
     def _has_observations_shape(self):
         return self._has_observations() and self.obs.shape
 
+    def has_observations_shape(self):
+        return self._has_observations_shape()
+
     def observations_shape_length(self):
         return (self._has_observations_shape() and len(self.obs.shape)) or 0
 

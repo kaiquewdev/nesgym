@@ -129,6 +129,10 @@ class DoubleDQNClassTest(tf.test.TestCase):
 		with self.test_session():
 			self.assertEqual(self.dqn.replay_buffer.has_observations(),False)
 
+	def testHasObservationsShape(self):
+		with self.test_session():
+			self.assertEqual(self.dqn.replay_buffer.has_observations_shape(),False)
+
 	def testObservationsShapeLengthType(self):
 		with self.test_session():
 			self.assertEqual(type(self.dqn.replay_buffer.observations_shape_length()),int)
