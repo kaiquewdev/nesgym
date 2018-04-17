@@ -162,12 +162,14 @@ class ReplayBuffer(object):
         start_idx = self.litimus_against_id(end_idx)
         is_observations_eq_two = self.is_observations_length_eq()
         has_done_prop = self._has_done_prop()
+        is_lt_zero_start_idx = start_idx < 0
+        is_not_eq_size = self.num_in_buffer != self.size
         # this checks if we are using low-dimensional observations, such as RAM
         # state, in which case we just directly return the latest RAM.
         if is_observations_eq_two:
             return self.get_observation(self.rid(end_id))
         # if there weren't enough frames ever in the buffer for context
-        if start_idx < 0 and self.num_in_buffer != self.size:
+        if is_lt_zero_start_idx and is_not_eq_size:
             start_idx = 0
         for idx in range(start_idx, end_idx - 1):
             mod_idx = self._mod_idx(idx)
