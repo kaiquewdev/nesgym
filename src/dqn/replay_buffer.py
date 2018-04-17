@@ -136,8 +136,14 @@ class ReplayBuffer(object):
     def _has_not_observations(self):
         return self.obs is None
 
+    def has_not_observations(self):
+        return self._has_not_observations()
+
     def _has_observations(self):
         return self.obs is not None
+
+    def has_observations(self):
+        return self._has_observations()
 
     def _has_observations_shape(self):
         return self._has_observations() and self.obs.shape
