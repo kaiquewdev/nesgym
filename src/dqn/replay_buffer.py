@@ -131,9 +131,14 @@ class ReplayBuffer(object):
         return max(0,idx - 1)
 
     def has_observation(self, k):
+        has_observations = self.has_observations()
         is_dict = type(self.obs) == dict
         is_ndarray = self.is_nparray(self.obs)
-        return (self.has_observations() and (is_ndarray and self.obs.tolist().index(k) > -1) or (self.has_observations() and (not is_ndarray and (is_dict and (k in self.obs)))))
+        has_key_on_list = lambda is_ndarray_cached: is_ndarray_cached and self.obs.tolist().index(k) > -1
+        has_checked_observations_with_key_on_list = lambda has_observations_cached,pre_cached_ndarray: has_observations_cached and has_key_on_list(pre_cached_ndarray) 
+        has_key_on_dict = lambda is_ndarray_cached, is_dict_cached: not is_ndarray_cached and (is_dict_cached and (k in self.obs))
+        has_checked_observations_with_key_on_dict = lambda has_observations_cached,pre_cached_ndarray,pre_cached_dict: has_observations_cached and has_key_on_dict(pre_cached_ndarray, pre_cached_dict)
+        return (has_checked_observations_with_key_on_list(has_observations,is_ndarray) or has_checked_observations_with_key_on_dict(has_observations,is_ndarray,is_dict))
 
     def get_observation(self,key,common=str('')):
         return (self.obs and (key in self.obs) and self.obs[key]) or common
