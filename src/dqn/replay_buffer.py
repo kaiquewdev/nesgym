@@ -141,7 +141,8 @@ class ReplayBuffer(object):
         return (has_checked_observations_with_key_on_list(has_observations,is_ndarray) or has_checked_observations_with_key_on_dict(has_observations,is_ndarray,is_dict))
 
     def get_observation(self,key,common=str('')):
-        return (self.obs and (key in self.obs) and self.obs[key]) or common
+        retrieve_content = lambda key_cached: self.has_observation(key_cached) and self.obs[key_cached]
+        return (self.has_observations() and (retrieve_content(key)) or common)
 
     def _has_not_observations(self):
         return self.obs is None
