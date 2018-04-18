@@ -151,6 +151,9 @@ class ReplayBuffer(object):
     def has_observations_shape(self):
         return self._has_observations_shape()
 
+    def is_nparray(self, lst=[]):
+        return type(lst) == np.ndarray
+
     def observations_shape_length(self):
         return (self._has_observations_shape() and ((type(self.obs) == np.ndarray)) and len(self.obs.shape)) or 0
 

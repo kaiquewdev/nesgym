@@ -133,6 +133,10 @@ class DoubleDQNClassTest(tf.test.TestCase):
 		with self.test_session():
 			self.assertEqual(self.dqn.replay_buffer.has_observations_shape(),False)
 
+	def testIsNpArray(self):
+		with self.test_session():
+			self.assertEqual(self.dqn.replay_buffer.is_nparray(np.asarray([1, 2, 3])),True)
+
 	def testObservationsShapeLengthType(self):
 		with self.test_session():
 			self.assertEqual(type(self.dqn.replay_buffer.observations_shape_length()),int)
