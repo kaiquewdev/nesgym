@@ -150,6 +150,16 @@ class DoubleDQNClassTest(tf.test.TestCase):
 			self.dqn.replay_buffer.obs = np.array([[1, 1],[2, 2]])
 			self.assertEqual(self.dqn.replay_buffer.is_observations_length_eq(2),True)
 
+	def testHasObservationInObservationsArray(self):
+		with self.test_session():
+			self.dqn.replay_buffer.obs = np.array([1, 2, 3])
+			self.assertEqual(self.dqn.replay_buffer.has_observation(2),True)
+
+	def testHasObservationInObservationsObject(self):
+		with self.test_session():
+			self.dqn.replay_buffer.obs = {'blanka':1}
+			self.assertEqual(self.dqn.replay_buffer.has_observation('blanka'),True)
+
 	def testChooseActionMethodOutputType(self):
 		with self.test_session():
 			observations = np.array([10,10,10])

@@ -130,6 +130,11 @@ class ReplayBuffer(object):
     def rid(self, idx=0):
         return max(0,idx - 1)
 
+    def has_observation(self, k):
+        is_dict = type(self.obs) == dict
+        is_ndarray = self.is_nparray(self.obs)
+        return (self.has_observations() and (is_ndarray and self.obs.tolist().index(k) > -1) or (self.has_observations() and (not is_ndarray and (is_dict and (k in self.obs)))))
+
     def get_observation(self,key,common=str('')):
         return (self.obs and (key in self.obs) and self.obs[key]) or common
 
