@@ -151,19 +151,23 @@ class ReplayBuffer(object):
         return self.obs is None
 
     def has_not_observations(self):
-        return self._has_not_observations()
+        has_not_suffaced_observations = self._has_not_observations
+        return has_not_suffaced_observations()
 
     def _has_observations(self):
         return self.obs is not None
 
     def has_observations(self):
-        return self._has_observations()
+        has_suffaced_observations = self._has_observations
+        return has_suffaced_observations()
 
     def _has_observations_shape(self):
-        return self._has_observations() and self.obs.shape
+        checked_observations_shape = lambda: self._has_observations() and self.obs.shape
+        return checked_observations_shape()
 
     def has_observations_shape(self):
-        return self._has_observations_shape()
+        has_suffaced_observations_shape = self._has_observations_shape
+        return has_suffaced_observations_shape()
 
     def is_nparray(self, lst=[]):
         return type(lst) == np.ndarray
