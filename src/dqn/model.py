@@ -24,7 +24,7 @@ from collections import deque
 
 import math
 
-np.random.seed(math.ceil((12**2)))
+np.random.seed(math.ceil((12**2.0)))
 
 def q_function(input_shape, num_actions):
     image_input = Input(shape=input_shape)
