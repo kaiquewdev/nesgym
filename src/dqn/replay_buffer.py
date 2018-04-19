@@ -141,8 +141,11 @@ class ReplayBuffer(object):
         return (has_checked_observations_with_key_on_list(has_observations,is_ndarray) or has_checked_observations_with_key_on_dict(has_observations,is_ndarray,is_dict))
 
     def get_observation(self,key,common=str('')):
-        retrieve_content = lambda key_cached: self.has_observation(key_cached) and self.obs[key_cached]
-        return (self.has_observations() and (retrieve_content(key)) or common)
+        has_observation = self.has_observation
+        has_observations = self.has_observations
+        retrieve_content = lambda key_cached: has_observation(key_cached) and self.obs[key_cached]
+        checked_retrievement = lambda key_cached: has_observations() and (retrieve_content(key_cached))
+        return (checked_retrievement(key) or common)
 
     def _has_not_observations(self):
         return self.obs is None
@@ -168,7 +171,7 @@ class ReplayBuffer(object):
     def observations_shape_length(self):
         typed_len = lambda: ((self.is_nparray(self.obs)) and len(self.obs.shape))
         checked_typed_len = lambda: (self.has_observations_shape() and typed_len())  
-        return (checked_typed_len() or 0)
+        return (checked_typed_len() or int())
 
     def is_observations_length_eq(self, v=2):
         return self.observations_shape_length() == v
