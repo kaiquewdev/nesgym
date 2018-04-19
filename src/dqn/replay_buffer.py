@@ -201,17 +201,19 @@ class ReplayBuffer(object):
         for idx in range(start_idx, end_idx - 1):
             mod_idx = modulated(idx)
             has_done_prop = has_done_prop_switcher()
+            has_done_prop_checking_presence = has_done_prop and self.done[mod_idx]
             # done_value = self._get_done_prop_indice(mod_idx)
-            if has_done_prop and self.done[mod_idx]:
+            if has_done_prop_checking_presence:
                 start_idx = idx + 1
         missing_context = self.frame_history_len - (end_idx - start_idx)
         # if zero padding is needed for missing context
         # or we are on the boundry of the buffer
-        if start_idx < 0 or missing_context > 0:
-            frames = [np.zeros_like(self.obs[0])
+        registering_context_decoupling = start_idx < 0 or missing_context > 0
+        if registering_context_decoupling:
+            frames = [np.zeros_like(self.get_observation(0))
                       for _ in range(missing_context)]
             for idx in range(start_idx, end_idx):
-                frames.append(self.obs[idx % self.size])
+                frames.append(self.get_observation(idx % self.size))
             return np.concatenate(frames, 2)
         else:
             # this optimization has potential to saves about 30% compute time \o/
