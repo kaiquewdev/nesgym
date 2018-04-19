@@ -178,7 +178,9 @@ class ReplayBuffer(object):
         return (checked_typed_len() or int())
 
     def is_observations_length_eq(self, v=2):
-        return self.observations_shape_length() == v
+        observations_shape_length = self.observations_shape_length
+        is_observations_shape_length_eq_value = observations_shape_length() == v
+        return is_observations_shape_length_eq_value
 
     def _has_done_prop(self):
         return self.done is not None
@@ -219,19 +221,29 @@ class ReplayBuffer(object):
         # or we are on the boundry of the buffer
         registering_context_decoupling = start_idx < 0 or missing_context > 0
         if registering_context_decoupling:
-            frames = [np.zeros_like(self.get_observation(0))
-                      for _ in range(missing_context)]
-            for idx in range(start_idx, end_idx):
-                frames.append(self.get_observation(idx % self.size))
-            return np.concatenate(frames, 2)
+            get_observation = self.get_observation
+            zeros_like_observation = lambda: np.zeros_like(get_observation(0))
+            missing_contexts = lambda: range(missing_context)
+            frames = [zeros_like_observation() for _ in missing_contexts()]
+            idxs = lambda: range(start_idx, end_idx)
+            for idx in idxs():
+                size = self.size
+                modulated_size = idx % size
+                frames.append(get_observation(modulated_size))
+            concat_frames = np.concatenate(frames, 2)
+            return concat_frames
         else:
             # this optimization has potential to saves about 30% compute time \o/
-            img_h, img_w = (0, 0)
-            if self._has_observations_shape():
+            img_h, img_w = (int(), int())
+            has_observation_shape = self._has_observations_shape
+            if has_observation_shape():
                 img_h, img_w = (self.obs.shape[1], self.obs.shape[2])
-                return self.obs[start_idx:end_idx].transpose(1, 2, 0, 3).reshape(img_h, img_w, -1)
+                limited_observations = self.obs[start_idx:end_idx]
+                transposed_observations = limited_observations.transpose(1, 2, 0, 3)
+                reshaped_transposed_observations = transposed_observations.reshape(img_h, img_w, -1)
+                return reshaped_transposed_observations
             else:
-                return 0
+                return int()
 
     def store_frame(self, frame):
         """Store a single frame in the buffer at the next available index, overwriting
