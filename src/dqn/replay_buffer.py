@@ -187,16 +187,20 @@ class ReplayBuffer(object):
         has_done_prop = self._has_done_prop()
         is_lt_zero_start_idx = start_idx < 0
         is_not_eq_size = self.num_in_buffer != self.size
+        get_observation = lambda end_id_cached: self.get_observation(self.rid(end_id_cached))
+        is_lt_zero_start_idx_and_is_not_eq_size = is_lt_zero_start_idx and is_not_eq_size
+        modulated = lambda idx_cached: self._mod_idx(idx_cached)
+        has_done_prop_switcher = lambda: self._has_done_prop()
         # this checks if we are using low-dimensional observations, such as RAM
         # state, in which case we just directly return the latest RAM.
         if is_observations_eq_two:
-            return self.get_observation(self.rid(end_id))
+            return get_observation(end_id)
         # if there weren't enough frames ever in the buffer for context
-        if is_lt_zero_start_idx and is_not_eq_size:
+        if is_lt_zero_start_idx_and_is_not_eq_size:
             start_idx = 0
         for idx in range(start_idx, end_idx - 1):
-            mod_idx = self._mod_idx(idx)
-            has_done_prop = self._has_done_prop()
+            mod_idx = modulated(idx)
+            has_done_prop = has_done_prop_switcher()
             # done_value = self._get_done_prop_indice(mod_idx)
             if has_done_prop and self.done[mod_idx]:
                 start_idx = idx + 1
