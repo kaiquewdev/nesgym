@@ -122,7 +122,12 @@ class ReplayBuffer(object):
             encodes frame at time `t - frame_history_len + i`
         """
         # assert self.num_in_buffer > 0
-        return self._encode_observation((self.next_idx - 1) % self.getSize())
+        decrease_next_id = lambda: self.next_idx - 1
+        getSize = self.getSize
+        modulate_next_id_decr_size = lambda: decrease_next_id() % getSize()
+        encode_observation = self._encode_observation
+        encode_observation_with_discrete_value = encode_observation(modulate_next_id_decr_size())
+        return encode_observation_with_discrete_value
 
     def plus_one_against_id(self, idx):
         return idx + 1
