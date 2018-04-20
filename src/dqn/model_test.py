@@ -168,6 +168,10 @@ class DoubleDQNClassTest(tf.test.TestCase):
 			expected = 3
 			self.assertEqual(getRidObservationExpectation,expected)
 
+	def testSizeExists(self):
+		with self.test_session():
+			self.assertEqual(self.dqn.replay_buffer.sizeExists(),True)
+
 	def testChooseActionMethodOutputType(self):
 		with self.test_session():
 			observations = np.array([10,10,10])

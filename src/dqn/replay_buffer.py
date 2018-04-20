@@ -105,6 +105,9 @@ class ReplayBuffer(object):
             0, self.num_in_buffer - 2), batch_size)
         return self._encode_sample(idxes)
 
+    def sizeExists(self):
+        return self.size > int()
+
     def encode_recent_observation(self):
         """Return the most recent `frame_history_len` frames.
 
