@@ -110,8 +110,13 @@ class DoubleDQN(object):
     def encodeRecentObservationsReplayBuffer(self):
         return self.replay_buffer.encode_recent_observation()
 
-    def choose_action(self, step, obs):
+    def _settle_replay_buffer_id(self, obs):
         self.replay_buffer_idx = self.get_replay_buffer_idx(obs)
+        return self
+
+    def choose_action(self, step, obs):
+        #self.replay_buffer_idx = self.get_replay_buffer_idx(obs)
+        self._settle_replay_buffer_id(obs)
         train_have_started = self.train_have_started
         is_new_exploration_decision = self.is_new_exploration_decision
         get_randint_actions = self.get_randint_actions
