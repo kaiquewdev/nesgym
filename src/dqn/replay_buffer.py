@@ -108,6 +108,9 @@ class ReplayBuffer(object):
     def sizeExists(self):
         return self.size > int()
 
+    def getSize(self):
+        return (self.sizeExists() and self.size)
+
     def encode_recent_observation(self):
         """Return the most recent `frame_history_len` frames.
 
@@ -119,7 +122,7 @@ class ReplayBuffer(object):
             encodes frame at time `t - frame_history_len + i`
         """
         # assert self.num_in_buffer > 0
-        return self._encode_observation((self.next_idx - 1) % self.size)
+        return self._encode_observation((self.next_idx - 1) % self.getSize())
 
     def plus_one_against_id(self, idx):
         return idx + 1

@@ -172,6 +172,10 @@ class DoubleDQNClassTest(tf.test.TestCase):
 		with self.test_session():
 			self.assertEqual(self.dqn.replay_buffer.sizeExists(),True)
 
+	def testGetSize(self):
+		with self.test_session():
+			self.assertEqual(self.dqn.replay_buffer.getSize(),1000000)
+
 	def testChooseActionMethodOutputType(self):
 		with self.test_session():
 			observations = np.array([10,10,10])
