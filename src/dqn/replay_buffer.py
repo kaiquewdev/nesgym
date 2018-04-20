@@ -207,6 +207,7 @@ class ReplayBuffer(object):
         has_done_prop_switcher = lambda: self._has_done_prop()
         _get_done = self._get_done
         check_and_access_done = lambda has_done_prop: has_done_prop and _get_done(mod_idx) 
+        missing_context_based_on_registering = lambda: self.frame_history_len - (end_idx - start_idx)
         # this checks if we are using low-dimensional observations, such as RAM
         # state, in which case we just directly return the latest RAM.
         if is_observations_eq_two:
@@ -221,7 +222,7 @@ class ReplayBuffer(object):
             # done_value = self._get_done_prop_indice(mod_idx)
             if has_done_prop_checking_presence:
                 start_idx = idx + 1
-        missing_context = self.frame_history_len - (end_idx - start_idx)
+        missing_context = missing_context_based_on_registering()
         # if zero padding is needed for missing context
         # or we are on the boundry of the buffer
         registering_context_decoupling = start_idx < 0 or missing_context > 0
