@@ -112,13 +112,21 @@ class DoubleDQN(object):
 
     def choose_action(self, step, obs):
         self.replay_buffer_idx = self.get_replay_buffer_idx(obs)
-        if self.train_have_started(step) or self.is_new_exploration_decision(step):
+        train_have_started = self.train_have_started
+        is_new_exploration_decision = self.is_new_exploration_decision
+        get_randint_actions = self.get_randint_actions
+        encodeRecentObservationsReplayBuffer = self.encodeRecentObservationsReplayBuffer
+        continuous_decision = lambda step_cached: train_have_started(step_cached) or is_new_exploration_decision(step_cached)
+        if continuous_decision(step):
             # take random action
-            action = self.get_randint_actions()
+            action = get_randint_actions()
         else:
             # take action that results in maximum q value
-            recent_obs = self.encodeRecentObservationsReplayBuffer()
-            q_vals = self.base_model.predict_on_batch(np.array([recent_obs])).flatten()
+            recent_obs = encodeRecentObservationsReplayBuffer()
+            base_model = self.base_model
+            arr_recent_obs = np.array([recent_obs])
+            base_model_predicted = base_model.predict_on_batch(arr_recent_obs)
+            q_vals = base_model_predicted.flatten()
             action = np.argmax(q_vals)
         return action
 
