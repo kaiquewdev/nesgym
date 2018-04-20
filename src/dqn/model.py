@@ -22,9 +22,7 @@ except Exception:
 
 from collections import deque
 
-import math
-
-np.random.seed(math.ceil((12**2.0)))
+np.random.seed(1024)
 
 def q_function(input_shape, num_actions):
     image_input = Input(shape=input_shape)
