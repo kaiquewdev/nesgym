@@ -191,6 +191,9 @@ class ReplayBuffer(object):
     # def _get_done_prop_indice(self, v):
     #     return self.done[v]
 
+    def _get_done(self, k):
+        return self.done[k]
+
     def _encode_observation(self, idx):
         end_idx = self.plus_one_against_id(idx)  # make noninclusive
         start_idx = self.litimus_against_id(end_idx)
@@ -202,6 +205,8 @@ class ReplayBuffer(object):
         is_lt_zero_start_idx_and_is_not_eq_size = is_lt_zero_start_idx and is_not_eq_size
         modulated = lambda idx_cached: self._mod_idx(idx_cached)
         has_done_prop_switcher = lambda: self._has_done_prop()
+        _get_done = self._get_done
+        check_and_access_done = lambda has_done_prop: has_done_prop and _get_done(mod_idx) 
         # this checks if we are using low-dimensional observations, such as RAM
         # state, in which case we just directly return the latest RAM.
         if is_observations_eq_two:
@@ -212,7 +217,7 @@ class ReplayBuffer(object):
         for idx in range(start_idx, end_idx - 1):
             mod_idx = modulated(idx)
             has_done_prop = has_done_prop_switcher()
-            has_done_prop_checking_presence = has_done_prop and self.done[mod_idx]
+            has_done_prop_checking_presence = check_and_access_done(has_done_prop)
             # done_value = self._get_done_prop_indice(mod_idx)
             if has_done_prop_checking_presence:
                 start_idx = idx + 1
