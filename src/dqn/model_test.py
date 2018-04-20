@@ -160,6 +160,14 @@ class DoubleDQNClassTest(tf.test.TestCase):
 			self.dqn.replay_buffer.obs = {'blanka':1}
 			self.assertEqual(self.dqn.replay_buffer.has_observation('blanka'),True)
 
+	def testGetRidObservation(self):
+		with self.test_session():
+			self.dqn.replay_buffer.obs = np.array([1, 2, 3])
+			ridInputValue = self.dqn.replay_buffer.plus_one_against_id(2)
+			getRidObservationExpectation = self.dqn.replay_buffer.get_rid_observation(ridInputValue)
+			expected = 3
+			self.assertEqual(getRidObservationExpectation,expected)
+
 	def testChooseActionMethodOutputType(self):
 		with self.test_session():
 			observations = np.array([10,10,10])

@@ -194,6 +194,9 @@ class ReplayBuffer(object):
     def _get_done(self, k):
         return self.done[k]
 
+    def get_rid_observation(self, index):
+        return self.get_observation(self.rid(index))
+
     def _encode_observation(self, idx):
         end_idx = self.plus_one_against_id(idx)  # make noninclusive
         start_idx = self.litimus_against_id(end_idx)
